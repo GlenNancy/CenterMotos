@@ -1,0 +1,16 @@
+// No Startup.cs
+services.AddIdentity<Mecanico, IdentityRole>()
+    .AddEntityFrameworkStores<SeuDbContext>();
+
+// Em algum lugar do seu código, para autenticar um mecânico
+var result = await _signInManager.PasswordSignInAsync(mecanico.Login, mecanico.Senha, false, lockoutOnFailure: false);
+
+if (result.Succeeded)
+{
+    // Autenticação bem-sucedida, pode redirecionar para a página principal do mecânico
+    // Ou realizar outras ações conforme necessário
+}
+else
+{
+    // Autenticação falhou, você pode tratar isso de acordo
+}

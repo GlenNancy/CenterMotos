@@ -1,0 +1,17 @@
+- CRIAR PUBLISH E SCRIPT PARA A NUVEM -
+dotnet publish -c release -o ./publish
+dotnet ef migrations script -o FirstScript.sql
+
+- INSTALAÇÃO -
+dotnet tool install --global dotnet-ef
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+- GERAR MIGRATIONS E SUBIR PRO BANCO -
+dotnet ef migrations add FirstMigrations
+dotnet ef database update
+
+- RODAR PROJETO -
+dotnet run
+dotnet watch run

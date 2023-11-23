@@ -1,0 +1,44 @@
+[HttpPost("AdicionarMecanico")]
+public async Task<IActionResult> AdicionarMecanicoAsync([FromBody] Mecanico novoMecanico)
+{
+    try
+    {
+        // Verificações manuais de validação
+        if (novoMecanico == null)
+        {
+            return BadRequest("O objeto de mecânico enviado é nulo.");
+        }
+
+        if (string.IsNullOrEmpty(novoMecanico.Nome) || novoMecanico.Nome.Length > 20)
+        {
+            return BadRequest("O campo Nome deve ter entre 1 e 20 caracteres.");
+        }
+
+        if (string.IsNullOrEmpty(novoMecanico.Cpf) || novoMecanico.Cpf.Length != 11)
+        {
+            return BadRequest("O campo CPF deve ter 11 caracteres.");
+        }
+
+        if (string.IsNullOrEmpty(novoMecanico.Login) || novoMecanico.Login.Length > 20)
+        {
+            return BadRequest("O campo Login deve ter entre 1 e 20 caracteres.");
+        }
+
+        if (string.IsNullOrEmpty(novoMecanico.Senha) || novoMecanico.Senha.Length > 30)
+        {
+            return BadRequest("O campo Senha deve ter entre 1 e 30 caracteres.");
+        }
+
+        // Adiciona o novo mecânico ao contexto
+        await _context.Mecanicos.AddAsync(novoMecanico);
+        await _context.SaveChangesAsync();
+
+        // Retorna uma resposta de sucesso
+        return Ok(new { Message = "Mecânico adicionado com sucesso", Mecanico = novoMecanico });
+    }
+    catch (Exception ex)
+    {
+        // Retorna uma resposta de erro em caso de falha
+        return BadRequest($"Ocorreu um erro: {ex.Message}");
+    }
+}
