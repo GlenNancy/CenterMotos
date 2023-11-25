@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using CenterMotosApi.Models;
 
 namespace CenterMotosApi.Models
 {
     [Table("Comentario")]
-    [PrimaryKey(nameof(Id))]
     public class Comentario
     {
         [Key]
@@ -14,9 +14,8 @@ namespace CenterMotosApi.Models
         [NotNull]
         public int Id { get; set; }
 
-        [ForeignKey("Produto")]
+        [ForeignKey("ProdutoId")]
         public int ProdutoId { get; set; }
-        public Produto Produto { get; set; }
 
         [Required]
         [StringLength(20)]

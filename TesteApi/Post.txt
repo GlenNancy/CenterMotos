@@ -1,0 +1,22 @@
+--- POST DE PRODUTO ---
+
+URL: http://localhost:5250/Produtos/RegistrarProduto
+
+BODY:
+{
+  "nome": "Pneu",
+  "foto": "./fotoPneu.jpg",
+  "descricao": "um pneu muito bom",
+  "preco": 200.55
+}
+
+--- POST DE COMENTARIO ---
+
+URL: http://localhost:5250/Comentarios/RegistrarComentario
+
+BODY:
+{
+  "produtoId": 1,
+  "nome": "Mauricio",
+  "descricaoComentario": "Produto de otima qualidade"
+}

@@ -29,6 +29,5 @@ namespace CenterMotosApi.Models
         [ForeignKey("Carrinho")]
         public int? CarrinhoId { get; set; }
         public Carrinho Carrinho { get; set; }
-
     }
 }

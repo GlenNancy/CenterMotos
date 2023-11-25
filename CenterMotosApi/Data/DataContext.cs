@@ -15,5 +15,6 @@ namespace CenterMotosApi.Data
         public DbSet<ItemCarrinho> ItemCarrinhos { get; set; }
         public DbSet<Mecanico> Mecanicos { get; set; }
         public DbSet<Produto> Produtos { get; set; }
+
     }
 }

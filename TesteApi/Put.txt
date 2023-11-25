@@ -1,0 +1,21 @@
+--- PUT PRODUTO ---
+
+URL: http://localhost:5250/Produtos/AtualizarProduto/2
+
+BODY:
+{
+  "nome": "Pneus",
+  "foto": "./fotoPneu.jpg",
+  "descricao": "Melhor pneu que você vai encontrar",
+  "preco": 120.51
+}
+
+--- PUT COMENTARIO ---
+
+URL: http://localhost:5250/Comentarios/AtualizarComentario/4
+
+{
+  "produtoId": 1,
+  "nome": "Mauricio",
+  "descricaoComentario": "achei caro"
+}

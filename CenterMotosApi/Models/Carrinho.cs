@@ -20,5 +20,4 @@ namespace CenterMotosApi.Models
 
         public ICollection<ItemCarrinho> ItensCarrinho { get; set; }
     }
-
 }

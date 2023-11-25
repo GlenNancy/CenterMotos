@@ -10,8 +10,6 @@ namespace CenterMotosApi.Models
     [PrimaryKey(nameof(Id))]
     public class Produto
     {
-        public ICollection<Comentario>? Comentarios { get; set; }
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [NotNull]
@@ -32,5 +30,7 @@ namespace CenterMotosApi.Models
 
         [Required]
         public decimal Preco { get; set; }
+
+        public ICollection<Comentario>? Comentarios { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using CenterMotosApi.Data;
 using CenterMotosApi.Models;
 
+
 namespace CenterMotosApi.Controllers
 {
     [ApiController]
@@ -21,7 +22,9 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                Produto produto = await _context.Produtos.FirstOrDefaultAsync(pBusca => pBusca.Id == id);
+                Produto produto = await _context.Produtos
+                    .Include(p => p.Comentarios)            // Inclui os comentários associados ao produto
+                    .FirstOrDefaultAsync(p => p.Id == id);
 
                 if (produto == null)
                 {
@@ -41,7 +44,9 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                List<Produto> lista = await _context.Produtos.ToListAsync();
+                List<Produto> lista = await _context.Produtos
+                    .Include(p => p.Comentarios)
+                    .ToListAsync();
 
                 if (lista.Count == 0)
                 {
@@ -55,6 +60,7 @@ namespace CenterMotosApi.Controllers
                 return BadRequest($"Ocorreu um erro: {ex.Message}");
             }
         }
+
 
         [HttpPost("RegistrarProduto")]
         public async Task<IActionResult> RegistrarProdutoAsync([FromBody] Produto produto)
@@ -112,6 +118,7 @@ namespace CenterMotosApi.Controllers
 
                 produtoExistente.Nome = produtoAtualizado.Nome;
                 produtoExistente.Descricao = produtoAtualizado.Descricao;
+                produtoExistente.Foto = produtoAtualizado.Foto;
                 produtoExistente.Preco = produtoAtualizado.Preco;
 
                 await _context.SaveChangesAsync();

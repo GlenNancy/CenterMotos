@@ -1,0 +1,6 @@
+--- DELETE PRODUTO ---
+URL: http://localhost:5250/Produtos/1
+
+--- DELETE COMENTARIO ---
+
+http://localhost:5250/Comentarios/1

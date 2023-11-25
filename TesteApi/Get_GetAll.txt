@@ -1,0 +1,9 @@
+--- GET E GETALL DE PRODUTO ---
+
+URL: http://localhost:5250/Produtos/1
+URL: http://localhost:5250/Produtos/GetAll
+
+--- GET E GETALL DE COMENTARIo ---
+
+http://localhost:5250/Comentarios/GetAll
+http://localhost:5250/Comentarios/1

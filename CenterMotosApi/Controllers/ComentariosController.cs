@@ -36,8 +36,8 @@ namespace CenterMotosApi.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAllAsync()
         {
             try
             {
@@ -57,7 +57,7 @@ namespace CenterMotosApi.Controllers
         }
 
         [HttpPost("RegistrarComentario")]
-        public async Task<IActionResult> RegistrarComentario([FromBody] Comentario comentario)
+        public async Task<IActionResult> RegistrarComentarioAsync([FromBody] Comentario comentario)
         {
             try
             {
