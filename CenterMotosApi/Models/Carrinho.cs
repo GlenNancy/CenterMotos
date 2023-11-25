@@ -11,6 +11,7 @@ namespace CenterMotosApi.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [NotNull]
         public int Id { get; set; }
 
         [Required]

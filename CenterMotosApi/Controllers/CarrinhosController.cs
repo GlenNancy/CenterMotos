@@ -7,17 +7,17 @@ namespace CenterMotosApi.Controllers
 {
     [ApiController]
     [Route("[Controller]")]
-    public class CarrinhoController : ControllerBase
+    public class CarrinhosController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public CarrinhoController(DataContext context)
+        public CarrinhosController(DataContext context)
         {
             _context = context;
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCarrinhoById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
@@ -36,8 +36,8 @@ namespace CenterMotosApi.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> RegistrarCarrinho([FromBody] Carrinho carrinho)
+        [HttpPost("CriarCarrinho")]
+        public async Task<IActionResult> CriarCarrinho([FromBody] Carrinho carrinho)
         {
             try
             {
