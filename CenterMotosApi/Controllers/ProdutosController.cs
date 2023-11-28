@@ -115,7 +115,6 @@ namespace CenterMotosApi.Controllers
                     return BadRequest("O objeto de produto atualizado é nulo.");
                 }
 
-
                 produtoExistente.Nome = produtoAtualizado.Nome;
                 produtoExistente.Descricao = produtoAtualizado.Descricao;
                 produtoExistente.Foto = produtoAtualizado.Foto;
