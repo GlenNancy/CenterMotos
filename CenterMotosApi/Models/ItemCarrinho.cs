@@ -25,8 +25,7 @@ namespace CenterMotosApi.Models
         [Required]
         public decimal PrecoUnitario { get; set; }
 
-        [Required]
-        [ForeignKey("CarrinhoId")]
+        [ForeignKey("Carrinho")]
         public int CarrinhoId { get; set; }
         public Carrinho Carrinho { get; set; }
     }

@@ -22,7 +22,9 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                Cliente cliente = await _context.Clientes.FirstOrDefaultAsync(p => p.Id == id);
+                Cliente cliente = await _context.Clientes
+                .Include(p => p.Comentarios)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
                 if (cliente == null)
                 {
@@ -42,7 +44,9 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                List<Cliente> lista = await _context.Clientes.ToListAsync();
+                List<Cliente> lista = await _context.Clientes
+                .Include(p => p.Comentarios)
+                .ToListAsync();
 
                 if (lista.Count == 0)
                 {
@@ -62,16 +66,21 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                Cliente clienteExistente = await _context.Clientes.FirstOrDefaultAsync(p => p.Id == cliente.Id);
-
                 if (cliente == null)
                 {
                     return BadRequest("O cliente enviado é nulo.");
                 }
 
-                if (cliente.Cpf == clienteExistente.Cpf)
+                Cliente clienteExistente = await _context.Clientes.FirstOrDefaultAsync(p => p.Cpf == cliente.Cpf);
+
+                if (clienteExistente != null)
                 {
                     return BadRequest("O cliente com este CPF já existe");
+                }
+
+                if (cliente.Cpf.Length != 11)
+                {
+                    return BadRequest("O CPF precisa ter 11 caracteres");
                 }
 
                 if (cliente.Nome.Length <= 2)
@@ -79,7 +88,7 @@ namespace CenterMotosApi.Controllers
                     return BadRequest("O nome deve ter no mínimo 3 caracteres.");
                 }
 
-                if (cliente.Nome == clienteExistente.Nome)
+                if (await _context.Clientes.AnyAsync(p => p.Nome == cliente.Nome))
                 {
                     return BadRequest("O cliente com este Nome já existe");
                 }

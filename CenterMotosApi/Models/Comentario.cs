@@ -17,6 +17,9 @@ namespace CenterMotosApi.Models
         [ForeignKey("ProdutoId")]
         public int ProdutoId { get; set; }
 
+        [ForeignKey("Cliente")]
+        public int ClienteId { get; set; }
+
         [Required]
         [StringLength(20)]
         [NotNull]

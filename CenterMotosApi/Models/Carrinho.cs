@@ -14,10 +14,9 @@ namespace CenterMotosApi.Models
         [NotNull]
         public int Id { get; set; }
 
-        [Required]
+        [ForeignKey("Cliente")]
         public int ClienteId { get; set; }
-        [ForeignKey("ClienteId")]
-        public Cliente Cliente { get; set; }
+        public Cliente Cliente { get; set; } 
 
         public ICollection<ItemCarrinho> ItensCarrinho { get; set; }
     }

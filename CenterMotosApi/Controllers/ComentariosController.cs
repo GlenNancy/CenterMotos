@@ -71,6 +71,10 @@ namespace CenterMotosApi.Controllers
                     return BadRequest("O comentário deve ter no mínimo 3 caracteres.");
                 }
 
+                Cliente cliente = await _context.Clientes.FirstOrDefaultAsync(p => p.Id == comentario.ClienteId);
+
+                comentario.Nome = cliente.Nome;
+
                 await _context.Comentarios.AddAsync(comentario);
                 await _context.SaveChangesAsync();
 
@@ -98,6 +102,9 @@ namespace CenterMotosApi.Controllers
                 {
                     return BadRequest("O comentario atualizado é nulo.");
                 }
+
+                Cliente cliente = await _context.Clientes.FirstOrDefaultAsync(p => p.Id == comentarioAtualizado.ClienteId);
+                comentarioAtualizado.Nome = cliente.Nome;
 
                 comentarioExistente.DescricaoComentario = comentarioAtualizado.DescricaoComentario;
 

@@ -4,6 +4,7 @@ using CenterMotosApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CenterMotosApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231128194421_ArrumandoRelacionamentoCarrinhoCliente")]
+    partial class ArrumandoRelacionamentoCarrinhoCliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,6 +54,9 @@ namespace CenterMotosApi.Migrations
                     b.Property<int?>("Carrinho")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Comentarios")
+                        .HasColumnType("int");
+
                     b.Property<string>("Cpf")
                         .IsRequired()
                         .HasMaxLength(11)
@@ -75,9 +81,6 @@ namespace CenterMotosApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClienteId")
-                        .HasColumnType("int");
-
                     b.Property<string>("DescricaoComentario")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -92,8 +95,6 @@ namespace CenterMotosApi.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClienteId");
 
                     b.HasIndex("ProdutoId");
 
@@ -211,19 +212,11 @@ namespace CenterMotosApi.Migrations
 
             modelBuilder.Entity("CenterMotosApi.Models.Comentario", b =>
                 {
-                    b.HasOne("CenterMotosApi.Models.Cliente", "Cliente")
-                        .WithMany("Comentarios")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CenterMotosApi.Models.Produto", null)
                         .WithMany("Comentarios")
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("CenterMotosApi.Models.ItemCarrinho", b =>
@@ -248,11 +241,6 @@ namespace CenterMotosApi.Migrations
             modelBuilder.Entity("CenterMotosApi.Models.Carrinho", b =>
                 {
                     b.Navigation("ItensCarrinho");
-                });
-
-            modelBuilder.Entity("CenterMotosApi.Models.Cliente", b =>
-                {
-                    b.Navigation("Comentarios");
                 });
 
             modelBuilder.Entity("CenterMotosApi.Models.Produto", b =>
