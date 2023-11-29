@@ -1,0 +1,107 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using CenterMotosApi.Data;
+using CenterMotosApi.Models;
+
+
+namespace CenterMotosApi.Controllers
+{
+    [ApiController]
+    [Route("[Controller]")]
+    public class MecanicosController : ControllerBase
+    {
+        private readonly DataContext _context;
+
+        public MecanicosController(DataContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                Mecanico mecanico = await _context.Mecanicos.FirstOrDefaultAsync(p => p.Id == id);
+
+                if (mecanico == null)
+                {
+                    return NotFound("Mecânico não encontrado");
+                }
+
+                return Ok(mecanico);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Ocorreu um erro: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAsync()
+        {
+            try
+            {
+                List<Mecanico> lista = await _context.Mecanicos.ToListAsync();
+
+                if (lista.Count == 0)
+                {
+                    return NotFound("Nenhum mecânico encontrado.");
+                }
+
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Ocorreu um erro: {ex.Message}");
+            }
+        }
+
+        [HttpPost("RegistrarMecanico")]
+        public async Task<IActionResult> RegistrarMecanicoAsync([FromBody] Mecanico mecanico)
+        {
+            try
+            {
+                if (mecanico == null)
+                {
+                    return BadRequest("O mecânico enviado é nulo.");
+                }
+
+                Mecanico mecanicoExistente = await _context.Mecanicos.FirstOrDefaultAsync(p => p.Cpf == mecanico.Cpf);
+
+                if (mecanicoExistente != null)
+                {
+                    return BadRequest("O usuario com este CPF já existe");
+                }
+
+                if (mecanico.Cpf.Length != 11)
+                {
+                    return BadRequest("O CPF precisa ter 11 caracteres");
+                }
+
+                if (mecanico.Nome.Length <= 2)
+                {
+                    return BadRequest("O nome deve ter no mínimo 3 caracteres.");
+                }
+
+                if (await _context.Mecanicos.AnyAsync(p => p.Nome == mecanico.Nome))
+                {
+                    return BadRequest("O usuario com este Nome já existe");
+                }
+
+                await _context.Mecanicos.AddAsync(mecanico);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Mecânico registrado com sucesso", Mecanico = mecanico });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Ocorreu um erro: {ex.Message}");
+            }
+        }
+
+        
+
+    }
+}

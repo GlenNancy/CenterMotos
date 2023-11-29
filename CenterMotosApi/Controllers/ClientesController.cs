@@ -24,6 +24,8 @@ namespace CenterMotosApi.Controllers
             {
                 Cliente cliente = await _context.Clientes
                 .Include(p => p.Comentarios)
+                .Include(p => p.Carrinho)  // Inclua a propriedade Carrinho
+                .ThenInclude(c => c.ItensCarrinho)  // Inclua os itens do carrinho
                 .FirstOrDefaultAsync(p => p.Id == id);
 
                 if (cliente == null)
@@ -75,7 +77,7 @@ namespace CenterMotosApi.Controllers
 
                 if (clienteExistente != null)
                 {
-                    return BadRequest("O cliente com este CPF já existe");
+                    return BadRequest("O usuario com este CPF já existe");
                 }
 
                 if (cliente.Cpf.Length != 11)
@@ -90,7 +92,7 @@ namespace CenterMotosApi.Controllers
 
                 if (await _context.Clientes.AnyAsync(p => p.Nome == cliente.Nome))
                 {
-                    return BadRequest("O cliente com este Nome já existe");
+                    return BadRequest("O usuario com este Nome já existe");
                 }
 
                 await _context.Clientes.AddAsync(cliente);
@@ -123,6 +125,21 @@ namespace CenterMotosApi.Controllers
                 }
 
                 clienteExistente.Nome = clienteAtualizado.Nome;
+
+                // Atualizar o nome em todos os comentários associados ao cliente
+                List<Comentario> lista = await _context.Comentarios
+                    .Where(c => c.ClienteId == id)
+                    .ToListAsync();
+
+                if (lista.Count == 0)
+                {
+                    return NotFound("Nenhum comentário encontrado.");
+                }
+
+                foreach (var comentario in lista)
+                {
+                    comentario.Nome = clienteAtualizado.Nome;
+                }
 
                 await _context.SaveChangesAsync();
 

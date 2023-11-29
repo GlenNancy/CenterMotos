@@ -48,7 +48,7 @@ namespace CenterMotosApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Carrinho")
+                    b.Property<int?>("CarrinhoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Cpf")
@@ -59,10 +59,12 @@ namespace CenterMotosApi.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CarrinhoId");
 
                     b.ToTable("Cliente");
                 });
@@ -137,24 +139,16 @@ namespace CenterMotosApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ComentarioId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Cpf")
                         .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)")
                         .HasColumnName("CPF");
 
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Senha")
                         .IsRequired()
@@ -209,9 +203,18 @@ namespace CenterMotosApi.Migrations
                     b.Navigation("Cliente");
                 });
 
+            modelBuilder.Entity("CenterMotosApi.Models.Cliente", b =>
+                {
+                    b.HasOne("CenterMotosApi.Models.Carrinho", "Carrinho")
+                        .WithMany()
+                        .HasForeignKey("CarrinhoId");
+
+                    b.Navigation("Carrinho");
+                });
+
             modelBuilder.Entity("CenterMotosApi.Models.Comentario", b =>
                 {
-                    b.HasOne("CenterMotosApi.Models.Cliente", "Cliente")
+                    b.HasOne("CenterMotosApi.Models.Cliente", null)
                         .WithMany("Comentarios")
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -222,8 +225,6 @@ namespace CenterMotosApi.Migrations
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("CenterMotosApi.Models.ItemCarrinho", b =>

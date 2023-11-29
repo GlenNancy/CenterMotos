@@ -21,7 +21,11 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                Carrinho carrinho = await _context.Carrinhos.Include(c => c.Cliente).Include(c => c.ItensCarrinho).FirstOrDefaultAsync(c => c.Id == id);
+                Carrinho carrinho = await _context.Carrinhos
+                    .Include(c => c.Cliente)
+                    .ThenInclude(cliente => cliente.Comentarios)
+                    .Include(c => c.ItensCarrinho)
+                    .FirstOrDefaultAsync(c => c.Id == id);
 
                 if (carrinho == null)
                 {
@@ -75,6 +79,13 @@ namespace CenterMotosApi.Controllers
                 if (carrinho == null)
                 {
                     return NotFound("Carrinho não encontrado");
+                }
+
+                // Remover a referência ao carrinho do cliente
+                var clienteComCarrinho = await _context.Clientes.Where(c => c.CarrinhoId == id).ToListAsync();
+                foreach (var cliente in clienteComCarrinho)
+                {
+                    cliente.CarrinhoId = null;
                 }
 
                 _context.Carrinhos.Remove(carrinho);

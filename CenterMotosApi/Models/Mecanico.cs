@@ -14,11 +14,8 @@ namespace CenterMotosApi.Models
         [NotNull]
         public int Id { get; set; }
 
-        [ForeignKey("Comentario")]
-        public int? ComentarioId { get; set; }
-
         [Required]
-        [StringLength(20)]
+        [StringLength(30)]
         [NotNull]
         public string Nome { get; set; }
 
@@ -27,11 +24,6 @@ namespace CenterMotosApi.Models
         [StringLength(11)]
         [NotNull]
         public string Cpf { get; set; }
-
-        [Required]
-        [StringLength(20)]
-        [NotNull]
-        public string Login { get; set; }
 
         [Required]
         [StringLength(30)] 
