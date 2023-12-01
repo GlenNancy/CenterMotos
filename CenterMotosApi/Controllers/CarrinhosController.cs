@@ -23,7 +23,6 @@ namespace CenterMotosApi.Controllers
             {
                 Carrinho carrinho = await _context.Carrinhos
                     .Include(c => c.Cliente)
-                    .ThenInclude(cliente => cliente.Comentarios)
                     .Include(c => c.ItensCarrinho)
                     .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -33,6 +32,30 @@ namespace CenterMotosApi.Controllers
                 }
 
                 return Ok(carrinho);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Ocorreu um erro: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAsync()
+        {
+            try
+            {
+                List<Carrinho> lista = await _context.Carrinhos
+                .Include(c => c.Cliente)
+                .Include(c => c.ItensCarrinho)
+                .ThenInclude(c => c.Produto)
+                .ToListAsync();
+
+                if (lista.Count == 0)
+                {
+                    return NotFound("Nenhum carrinho encontrado.");
+                }
+
+                return Ok(lista);
             }
             catch (Exception ex)
             {
@@ -61,7 +84,7 @@ namespace CenterMotosApi.Controllers
                 _context.Carrinhos.Add(carrinho);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetCarrinhoById", new { id = carrinho.Id }, carrinho);
+                return Ok(carrinho);
             }
             catch (Exception ex)
             {
@@ -81,11 +104,11 @@ namespace CenterMotosApi.Controllers
                     return NotFound("Carrinho não encontrado");
                 }
 
-                // Remover a referência ao carrinho do cliente
-                var clienteComCarrinho = await _context.Clientes.Where(c => c.CarrinhoId == id).ToListAsync();
-                foreach (var cliente in clienteComCarrinho)
+                var clienteComCarrinho = await _context.Clientes.FirstOrDefaultAsync(c => c.CarrinhoId == id);
+
+                if (clienteComCarrinho != null)
                 {
-                    cliente.CarrinhoId = null;
+                    clienteComCarrinho.CarrinhoId = null;
                 }
 
                 _context.Carrinhos.Remove(carrinho);

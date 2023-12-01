@@ -48,6 +48,8 @@ namespace CenterMotosApi.Controllers
             {
                 List<Cliente> lista = await _context.Clientes
                 .Include(p => p.Comentarios)
+                .Include(p => p.Carrinho) 
+                .ThenInclude(c => c.ItensCarrinho)
                 .ToListAsync();
 
                 if (lista.Count == 0)
@@ -93,6 +95,21 @@ namespace CenterMotosApi.Controllers
                 if (await _context.Clientes.AnyAsync(p => p.Nome == cliente.Nome))
                 {
                     return BadRequest("O usuario com este Nome já existe");
+                }
+
+                if (cliente.Senha.Length < 6)
+                {
+                    return BadRequest("A senha deve ter pelo menos 6 caracteres");
+                }
+
+                if (!cliente.Senha.Any(char.IsDigit))
+                {
+                    return BadRequest("A senha deve conter pelo menos um número");
+                }
+
+                if (!cliente.Senha.Any(char.IsUpper))
+                {
+                    return BadRequest("A senha deve conter pelo menos uma letra maiúscula");
                 }
 
                 await _context.Clientes.AddAsync(cliente);

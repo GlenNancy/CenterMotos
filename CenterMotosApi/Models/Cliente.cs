@@ -24,10 +24,10 @@ namespace CenterMotosApi.Models
         [RegularExpression(@"^\d{11}$", ErrorMessage = "O CPF precisa ter 11 dígitos")]
         public string Cpf { get; set; }
 
-        /*[Required]
+        [Required]
         [StringLength(30)]
         public string Senha { get; set; }
-        */
+        
         [ForeignKey("Carrinho")]
         public int? CarrinhoId { get; set; }
 

@@ -63,7 +63,7 @@ namespace CenterMotosApi.Controllers
 
 
         [HttpPost("RegistrarProduto")]
-        public async Task<IActionResult> RegistrarProdutoAsync([FromBody] Produto produto)
+        public async Task<IActionResult> RegistrarProdutoAsync([FromForm] Produto produto)
         {
             try
             {
@@ -87,6 +87,16 @@ namespace CenterMotosApi.Controllers
                     return BadRequest("O campo Preço deve ser maior que zero.");
                 }
 
+                // Processar o upload da imagem
+                if (produto.ImagemUpload != null && produto.ImagemUpload.Length > 0)
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        await produto.ImagemUpload.CopyToAsync(stream);
+                        produto.Foto = stream.ToArray();
+                    }
+                }
+
                 await _context.Produtos.AddAsync(produto);
                 await _context.SaveChangesAsync();
 
@@ -97,6 +107,7 @@ namespace CenterMotosApi.Controllers
                 return BadRequest($"Ocorreu um erro: {ex.Message}");
             }
         }
+
 
         [HttpPut("AtualizarProduto/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Produto produtoAtualizado)

@@ -89,6 +89,21 @@ namespace CenterMotosApi.Controllers
                     return BadRequest("O usuario com este Nome já existe");
                 }
 
+                if (mecanico.Senha.Length < 6)
+                {
+                    return BadRequest("A senha deve ter pelo menos 6 caracteres");
+                }
+
+                if (!mecanico.Senha.Any(char.IsDigit))
+                {
+                    return BadRequest("A senha deve conter pelo menos um número");
+                }
+
+                if (!mecanico.Senha.Any(char.IsUpper))
+                {
+                    return BadRequest("A senha deve conter pelo menos uma letra maiúscula");
+                }
+
                 await _context.Mecanicos.AddAsync(mecanico);
                 await _context.SaveChangesAsync();
 
@@ -101,7 +116,56 @@ namespace CenterMotosApi.Controllers
             }
         }
 
-        
+        [HttpPut("AtualizarNome/{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] Mecanico mecanicoAtualizado)
+        {
+            try
+            {
+                Mecanico mecanicoExistente = await _context.Mecanicos.FindAsync(id);
 
+                if (mecanicoExistente == null)
+                {
+                    return NotFound("Cliente não encontrado");
+                }
+
+                if (mecanicoAtualizado == null)
+                {
+                    return BadRequest("O objeto de cliente é nulo.");
+                }
+
+                mecanicoExistente.Nome = mecanicoAtualizado.Nome;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Mecânico atualizado com sucesso", Cliente = mecanicoExistente });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Ocorreu um erro: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                Mecanico mecanico = await _context.Mecanicos.FirstOrDefaultAsync(delete => delete.Id == id);
+
+                if (mecanico == null)
+                {
+                    return NotFound("Mecânico não encontrado");
+                }
+
+                _context.Mecanicos.Remove(mecanico);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Cliente excluído com sucesso", Mecanico = mecanico });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Ocorreu um erro: {ex.Message}");
+            }
+        }
     }
 }

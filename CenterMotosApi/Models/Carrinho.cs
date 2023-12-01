@@ -9,20 +9,14 @@ namespace CenterMotosApi.Models
     [PrimaryKey(nameof(Id))]
     public class Carrinho
     {
-        public Carrinho()
-        {
-            ItensCarrinho = new List<ItemCarrinho>();
-        }
-        
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [NotNull]
         public int Id { get; set; }
 
         [ForeignKey("Cliente")]
         public int ClienteId { get; set; }
         public Cliente? Cliente { get; set; }
 
-        public ICollection<ItemCarrinho> ItensCarrinho { get; set; }
+        public ICollection<ItemCarrinho>? ItensCarrinho { get; set; }
     }
 }

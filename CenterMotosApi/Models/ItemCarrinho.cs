@@ -17,7 +17,7 @@ namespace CenterMotosApi.Models
         [Required]
         public int ProdutoId { get; set; }
         [ForeignKey("ProdutoId")]
-        public Produto Produto { get; set; }
+        public Produto? Produto { get; set; }
 
         [Required]
         public int Quantidade { get; set; }
@@ -28,6 +28,5 @@ namespace CenterMotosApi.Models
         [Required]
         [ForeignKey("Carrinho")]
         public int CarrinhoId { get; set; }
-        public Carrinho Carrinho { get; set; }
     }
 }
