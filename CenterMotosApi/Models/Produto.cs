@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 namespace CenterMotosApi.Models
 {
     [Table("Produto")]
-    [PrimaryKey(nameof(Id))]
     public class Produto
     {
         [Key]
@@ -21,7 +20,7 @@ namespace CenterMotosApi.Models
         public string Nome { get; set; }
 
         [Column("Foto_Produto")]
-        public byte[]? Foto { get; set; }
+        public string? Foto { get; set; }
 
         [NotMapped]
         public IFormFile? ImagemUpload { get; set; } // estou especificado que a imagem vai vir de um upload de imagem vinda do front

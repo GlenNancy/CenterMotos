@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CenterMotosApi.Data;
 using CenterMotosApi.Models;
+using CenterMotosApi.Services;
 
 
 namespace CenterMotosApi.Controllers
@@ -11,10 +12,12 @@ namespace CenterMotosApi.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IClientesService _clientesService;
 
-        public ClientesController(DataContext context)
+        public ClientesController(DataContext context, IClientesService clientesService)
         {
             _context = context;
+            _clientesService = clientesService;
         }
 
         [HttpGet("{id}")]
@@ -22,16 +25,7 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                Cliente cliente = await _context.Clientes
-                .Include(p => p.Comentarios)
-                .Include(p => p.Carrinho)  // Inclua a propriedade Carrinho
-                .ThenInclude(c => c.ItensCarrinho)  // Inclua os itens do carrinho
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-                if (cliente == null)
-                {
-                    return NotFound("Cliente não encontrado");
-                }
+                Cliente cliente = await _clientesService.GetClienteByIdAsync(id);
 
                 return Ok(cliente);
             }
@@ -46,16 +40,7 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                List<Cliente> lista = await _context.Clientes
-                .Include(p => p.Comentarios)
-                .Include(p => p.Carrinho) 
-                .ThenInclude(c => c.ItensCarrinho)
-                .ToListAsync();
-
-                if (lista.Count == 0)
-                {
-                    return NotFound("Nenhum cliente encontrado.");
-                }
+                IEnumerable<Cliente> lista = await _clientesService.GetAllClienteAsync();
 
                 return Ok(lista);
             }
@@ -70,50 +55,7 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                if (cliente == null)
-                {
-                    return BadRequest("O cliente enviado é nulo.");
-                }
-
-                Cliente clienteExistente = await _context.Clientes.FirstOrDefaultAsync(p => p.Cpf == cliente.Cpf);
-
-                if (clienteExistente != null)
-                {
-                    return BadRequest("O usuario com este CPF já existe");
-                }
-
-                if (cliente.Cpf.Length != 11)
-                {
-                    return BadRequest("O CPF precisa ter 11 caracteres");
-                }
-
-                if (cliente.Nome.Length <= 2)
-                {
-                    return BadRequest("O nome deve ter no mínimo 3 caracteres.");
-                }
-
-                if (await _context.Clientes.AnyAsync(p => p.Nome == cliente.Nome))
-                {
-                    return BadRequest("O usuario com este Nome já existe");
-                }
-
-                if (cliente.Senha.Length < 6)
-                {
-                    return BadRequest("A senha deve ter pelo menos 6 caracteres");
-                }
-
-                if (!cliente.Senha.Any(char.IsDigit))
-                {
-                    return BadRequest("A senha deve conter pelo menos um número");
-                }
-
-                if (!cliente.Senha.Any(char.IsUpper))
-                {
-                    return BadRequest("A senha deve conter pelo menos uma letra maiúscula");
-                }
-
-                await _context.Clientes.AddAsync(cliente);
-                await _context.SaveChangesAsync();
+                await _clientesService.CreateClienteAsync(cliente);
 
                 return Ok(new { Message = "Cliente registrado com sucesso", Cliente = cliente });
 
@@ -129,36 +71,7 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                Cliente clienteExistente = await _context.Clientes.FindAsync(id);
-
-                if (clienteExistente == null)
-                {
-                    return NotFound("Cliente não encontrado");
-                }
-
-                if (clienteAtualizado == null)
-                {
-                    return BadRequest("O objeto de cliente é nulo.");
-                }
-
-                clienteExistente.Nome = clienteAtualizado.Nome;
-
-                // Atualizar o nome em todos os comentários associados ao cliente
-                List<Comentario> lista = await _context.Comentarios
-                    .Where(c => c.ClienteId == id)
-                    .ToListAsync();
-
-                if (lista.Count == 0)
-                {
-                    return NotFound("Nenhum comentário encontrado.");
-                }
-
-                foreach (var comentario in lista)
-                {
-                    comentario.Nome = clienteAtualizado.Nome;
-                }
-
-                await _context.SaveChangesAsync();
+                Cliente clienteExistente = await _clientesService.UpdateClienteAsync(id, clienteAtualizado);
 
                 return Ok(new { Message = "Cliente atualizado com sucesso", Cliente = clienteExistente });
             }
@@ -173,15 +86,8 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                Cliente cliente = await _context.Clientes.FirstOrDefaultAsync(delete => delete.Id == id);
-
-                if (cliente == null)
-                {
-                    return NotFound("Cliente não encontrado");
-                }
-
-                _context.Clientes.Remove(cliente);
-                await _context.SaveChangesAsync();
+                Cliente cliente = await _clientesService.GetClienteByIdAsync(id);
+                await _clientesService.RemoveCliente(id);
 
                 return Ok(new { Message = "Cliente excluído com sucesso", Cliente = cliente });
             }

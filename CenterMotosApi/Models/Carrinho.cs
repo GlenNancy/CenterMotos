@@ -1,12 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
 
 namespace CenterMotosApi.Models
 {
     [Table("Carrinho")]
-    [PrimaryKey(nameof(Id))]
     public class Carrinho
     {
         [Key]

@@ -6,12 +6,10 @@ using Microsoft.EntityFrameworkCore;
 namespace CenterMotosApi.Models
 {
     [Table("Cliente")]
-    [PrimaryKey(nameof(Id))]
     public class Cliente
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [NotNull]
         public int Id { get; set; }
 
         [Required]

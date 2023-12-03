@@ -75,6 +75,10 @@ namespace CenterMotosApi.Controllers
 
                 comentario.Nome = cliente.Nome;
 
+                Produto produto = await _context.Produtos.FirstOrDefaultAsync(p => p.Id == comentario.ProdutoId);
+
+                comentario.Nome_Produto = produto.Nome;
+
                 await _context.Comentarios.AddAsync(comentario);
                 await _context.SaveChangesAsync();
 

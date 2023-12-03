@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 namespace CenterMotosApi.Models
 {
     [Table("Mecanico")]
-    [PrimaryKey(nameof(Id))]
     public class Mecanico
     {
         [Key]
@@ -16,18 +15,15 @@ namespace CenterMotosApi.Models
 
         [Required]
         [StringLength(30)]
-        [NotNull]
         public string Nome { get; set; }
 
         [Required]
         [Column("CPF")]
         [StringLength(11)]
-        [NotNull]
         public string Cpf { get; set; }
 
         [Required]
         [StringLength(30)] 
-        [NotNull]
         public string Senha { get; set; }
     }
 }

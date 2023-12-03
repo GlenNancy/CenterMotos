@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 namespace CenterMotosApi.Models
 {
     [Table("ItemCarrinho")]
-    [PrimaryKey(nameof(Id))]
     public class ItemCarrinho
     {
         [Key]

@@ -88,14 +88,14 @@ namespace CenterMotosApi.Controllers
                 }
 
                 // Processar o upload da imagem
-                if (produto.ImagemUpload != null && produto.ImagemUpload.Length > 0)
+                /*if (produto.ImagemUpload != null && produto.ImagemUpload.Length > 0)
                 {
                     using (var stream = new MemoryStream())
                     {
                         await produto.ImagemUpload.CopyToAsync(stream);
                         produto.Foto = stream.ToArray();
                     }
-                }
+                }*/
 
                 await _context.Produtos.AddAsync(produto);
                 await _context.SaveChangesAsync();
