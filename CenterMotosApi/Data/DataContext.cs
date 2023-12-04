@@ -30,13 +30,6 @@ namespace CenterMotosApi.Data
                 new Mecanico() { Id = 2, Nome = "Birobiro", Cpf = "12345678913", Senha = "123456" }
             );
 
-            modelBuilder.Entity<Produto>().HasData
-            (
-                new Produto() { Id = 1, Nome = "Retrovisor", Foto = null, Descricao = "Retrovisor Titan 150 / 160 2014- Esquerdo MOD Original (GVS) Cada - 4001", Preco = 19.00M },
-                new Produto() { Id = 2, Nome = "Capacete", Foto = null, Descricao = "Capacete PRO TORK V-PRO JET 3 Articulado", Preco = 208.99M },
-                new Produto() { Id = 3, Nome = "Bateria", Foto = null, Descricao = "Bateria Pioneiro YTX7LBS (MBR7-BS) Selada Falcon / Twister / Tornado / Fazer 250 / Lander / TITAN150", Preco = 162.75M }
-            );
-
             modelBuilder.Entity<Comentario>().HasData
             (
                 new Comentario() { Id = 1, ProdutoId = 1, ClienteId = 1, Nome = "aleatorio", Nome_Produto = "nada", DescricaoComentario = "Retrovisor excelente, bonito e barato"},

@@ -22,9 +22,6 @@ namespace CenterMotosApi.Models
         [Column("Foto_Produto")]
         public string? Foto { get; set; }
 
-        [NotMapped]
-        public IFormFile? ImagemUpload { get; set; } // estou especificado que a imagem vai vir de um upload de imagem vinda do front
-
         [Required]
         [MaxLength(255)]
         [Column("Descricao_Produto")]

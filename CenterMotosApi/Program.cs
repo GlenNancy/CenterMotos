@@ -3,6 +3,7 @@ using CenterMotosApi.Repositories;
 using CenterMotosApi.Repositories.Interfaces;
 using CenterMotosApi.Repositories.UnitOfWork;
 using CenterMotosApi.Services;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -12,6 +13,13 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoLocal"));
 });
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 100_000_000; // Limite de tamanho de 100 MB para uploads
+});
+
+builder.Services.AddMvc();
 
 builder.Services.AddScoped<IClientesService, ClientesService>();
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();

@@ -11,9 +11,7 @@ namespace CenterMotosApi.Services
     public class ClientesService : IClientesService
     {
         private readonly IUnitOfWork _unitOfWork;
-
         private readonly DataContext _context;
-
         private readonly IClientesRepository _clientesRepository;
 
         public ClientesService(DataContext context, IClientesRepository clientesRepository, IUnitOfWork unitOfWork)
@@ -21,18 +19,6 @@ namespace CenterMotosApi.Services
             _context = context;
             _clientesRepository = clientesRepository;
             _unitOfWork = unitOfWork;
-        }
-
-        public async Task<IEnumerable<Cliente>> GetAllClienteAsync()
-        {
-            IEnumerable<Cliente> clientes = await _clientesRepository.GetAllClienteAsync();
-
-            if (!clientes.Any())
-            {
-                throw new NotFoundException("Nenhum cliente encontrado.");
-            }
-
-            return clientes;
         }
 
         public async Task<Cliente> GetClienteByIdAsync(int id)
@@ -45,6 +31,18 @@ namespace CenterMotosApi.Services
             }
 
             return cliente;
+        }
+
+        public async Task<IEnumerable<Cliente>> GetAllClienteAsync()
+        {
+            IEnumerable<Cliente> clientes = await _clientesRepository.GetAllClienteAsync();
+
+            if (!clientes.Any())
+            {
+                throw new NotFoundException("Nenhum cliente encontrado.");
+            }
+
+            return clientes;
         }
 
         public async Task<Cliente> CreateClienteAsync(Cliente cliente)

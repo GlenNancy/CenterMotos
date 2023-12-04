@@ -13,17 +13,6 @@ namespace CenterMotosApi.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Cliente>> GetAllClienteAsync()
-        {
-            IEnumerable<Cliente> cliente = await _context.Clientes
-                    .Include(c => c.Comentarios)
-                    .Include(c => c.Carrinho) 
-                    .ThenInclude(c => c.ItensCarrinho)
-                    .ToListAsync();
-            
-            return cliente;
-        }
-
         public async Task<Cliente> GetClienteByIdAsync(int id)
         {
             return await _context.Clientes
@@ -31,6 +20,17 @@ namespace CenterMotosApi.Repositories
                 .Include(p => p.Carrinho)
                 .ThenInclude(c => c.ItensCarrinho)
                 .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<IEnumerable<Cliente>> GetAllClienteAsync()
+        {
+            IEnumerable<Cliente> clientes = await _context.Clientes
+                    .Include(c => c.Comentarios)
+                    .Include(c => c.Carrinho) 
+                    .ThenInclude(c => c.ItensCarrinho)
+                    .ToListAsync();
+            
+            return clientes;
         }
 
         public async Task CreateClienteAsync(Cliente cliente)
