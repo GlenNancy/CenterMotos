@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using CenterMotosApi.Data;
 using CenterMotosApi.Models;
 using CenterMotosApi.Services;
+using CenterMotosApi.DTO;
 
 
 namespace CenterMotosApi.Controllers
@@ -26,8 +27,9 @@ namespace CenterMotosApi.Controllers
             try
             {
                 Cliente cliente = await _clientesService.GetClienteByIdAsync(id);
+                ClienteDTO clienteDTO = cliente.ToCliente();
 
-                return Ok(cliente);
+                return Ok(clienteDTO);
             }
             catch (Exception ex)
             {
@@ -40,9 +42,10 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                IEnumerable<Cliente> lista = await _clientesService.GetAllClienteAsync();
+                IEnumerable<Cliente> cliente = await _clientesService.GetAllClienteAsync();
+                IEnumerable<ClienteDTO> clienteDTO = cliente.Select(c => c.ToCliente());
 
-                return Ok(lista);
+                return Ok(clienteDTO);
             }
             catch (Exception ex)
             {
@@ -74,6 +77,21 @@ namespace CenterMotosApi.Controllers
                 Cliente clienteExistente = await _clientesService.UpdateClienteAsync(id, clienteAtualizado);
 
                 return Ok(new { Message = "Cliente atualizado com sucesso", Cliente = clienteExistente });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Ocorreu um erro: {ex.Message}");
+            }
+        }
+
+        [HttpPut("AlterarSenha/{id}")]
+        public async Task<IActionResult> UpdatePassword(int id, [FromBody] Cliente clienteSenhaAtualizada)
+        {
+            try
+            {
+                Cliente clienteExistente = await _clientesService.UpdatePasswordClienteAsync(id, clienteSenhaAtualizada);
+
+                return Ok(new { Message = "Senha alterada com suceso", Cliente = clienteExistente});
             }
             catch (Exception ex)
             {

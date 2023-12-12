@@ -37,7 +37,7 @@ namespace CenterMotosApi.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Carrinho");
+                    b.ToTable("Carrinho", (string)null);
 
                     b.HasData(
                         new
@@ -83,7 +83,7 @@ namespace CenterMotosApi.Migrations
 
                     b.HasIndex("CarrinhoId");
 
-                    b.ToTable("Cliente");
+                    b.ToTable("Cliente", (string)null);
 
                     b.HasData(
                         new
@@ -137,7 +137,7 @@ namespace CenterMotosApi.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("Comentario");
+                    b.ToTable("Comentario", (string)null);
 
                     b.HasData(
                         new
@@ -186,7 +186,7 @@ namespace CenterMotosApi.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("ItemCarrinho");
+                    b.ToTable("ItemCarrinho", (string)null);
                 });
 
             modelBuilder.Entity("CenterMotosApi.Models.Mecanico", b =>
@@ -215,7 +215,7 @@ namespace CenterMotosApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Mecanico");
+                    b.ToTable("Mecanico", (string)null);
 
                     b.HasData(
                         new
@@ -263,7 +263,7 @@ namespace CenterMotosApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Produto");
+                    b.ToTable("Produto", (string)null);
                 });
 
             modelBuilder.Entity("CenterMotosApi.Models.Carrinho", b =>

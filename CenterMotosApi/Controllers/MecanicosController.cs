@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CenterMotosApi.Data;
 using CenterMotosApi.Models;
+using CenterMotosApi.DTO;
 
 
 namespace CenterMotosApi.Controllers
@@ -23,13 +24,14 @@ namespace CenterMotosApi.Controllers
             try
             {
                 Mecanico mecanico = await _context.Mecanicos.FirstOrDefaultAsync(p => p.Id == id);
+                MecanicoDTO mecanicoDTO = mecanico.ToMecanico();
 
                 if (mecanico == null)
                 {
                     return NotFound("Mecânico não encontrado");
                 }
 
-                return Ok(mecanico);
+                return Ok(mecanicoDTO);
             }
             catch (Exception ex)
             {
@@ -42,14 +44,15 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                List<Mecanico> lista = await _context.Mecanicos.ToListAsync();
+                List<Mecanico> mecanico = await _context.Mecanicos.ToListAsync();
+                IEnumerable<MecanicoDTO> mecanicoDTO = mecanico.Select(m => m.ToMecanico());
 
-                if (lista.Count == 0)
+                if (!mecanicoDTO.Any())
                 {
                     return NotFound("Nenhum mecânico encontrado.");
                 }
 
-                return Ok(lista);
+                return Ok(mecanicoDTO);
             }
             catch (Exception ex)
             {

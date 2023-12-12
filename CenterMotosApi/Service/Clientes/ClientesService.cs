@@ -126,6 +126,27 @@ namespace CenterMotosApi.Services
             return cliente;
         }
 
+        public async Task<Cliente> UpdatePasswordClienteAsync(int id, Cliente cliente)
+        {
+            Cliente clienteExistente = await _clientesRepository.GetClienteByIdAsync(id);
+
+            if (clienteExistente == null)
+            {
+                throw new NotFoundException("Cliente não encontrado");
+            }
+
+            if (clienteExistente.Senha == cliente.Senha)
+            {
+                throw new Exception("A senha não pode ser igual a senha atual");
+            }
+
+            clienteExistente.Senha = cliente.Senha;
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return cliente;
+        }
+
         public async Task<Cliente> RemoveCliente(int id)
         {
             Cliente clienteExistente = await _clientesRepository.GetClienteByIdAsync(id);

@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using CenterMotosApi.DTO;
+using CenterMotosApi.DTO.Builder;
 using Microsoft.EntityFrameworkCore;
 
 namespace CenterMotosApi.Models
@@ -32,5 +34,17 @@ namespace CenterMotosApi.Models
         public Carrinho? Carrinho { get; set; }
 
         public ICollection<Comentario>? Comentarios { get; set; }
+
+        public ClienteDTO ToCliente()
+        {
+            ClienteDTO clienteDTO = new ClienteDTOBuilder()
+            .WithId(Id)
+            .WithNomeCliente(Nome)
+            .WithCarrinhoId(CarrinhoId)
+            .WithComentarios(Comentarios)
+            .Build();
+
+            return clienteDTO;
+        }
     }
 }

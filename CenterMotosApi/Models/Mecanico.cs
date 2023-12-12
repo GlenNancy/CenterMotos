@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using CenterMotosApi.DTO;
+using CenterMotosApi.DTO.Builder;
 using Microsoft.EntityFrameworkCore;
 
 namespace CenterMotosApi.Models
@@ -25,5 +27,15 @@ namespace CenterMotosApi.Models
         [Required]
         [StringLength(30)] 
         public string Senha { get; set; }
+
+        public MecanicoDTO ToMecanico()
+        {
+            MecanicoDTO mecanicoDTO = new MecanicoDTOBuilder()
+            .WithId(Id)
+            .WithNomeMecanico(Nome)
+            .Build();
+
+            return mecanicoDTO;
+        }
     }
 }
