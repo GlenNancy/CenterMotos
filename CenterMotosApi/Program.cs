@@ -23,7 +23,11 @@ builder.Services.AddMvc();
 
 builder.Services.AddScoped<IClientesService, ClientesService>();
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
+builder.Services.AddScoped<ICarrinhoService, CarrinhoService>();
+builder.Services.AddScoped<ICarrinhosRepository, CarrinhosRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IItemCarrinhosService, ItemCarrinhosService>();
+builder.Services.AddScoped<IItemCarrinhosRepository, ItemCarrinhosRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

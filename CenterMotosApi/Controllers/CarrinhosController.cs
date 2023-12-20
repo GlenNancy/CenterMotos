@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CenterMotosApi.Data;
 using CenterMotosApi.Models;
+using CenterMotosApi.Services;
+using CenterMotosApi.DTO;
 
 namespace CenterMotosApi.Controllers
 {
@@ -10,10 +12,12 @@ namespace CenterMotosApi.Controllers
     public class CarrinhosController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly ICarrinhoService _carrinhosService;
 
-        public CarrinhosController(DataContext context)
+        public CarrinhosController(DataContext context, ICarrinhoService carrinhoService)
         {
             _context = context;
+            _carrinhosService = carrinhoService;
         }
 
         [HttpGet("{id}")]
@@ -21,17 +25,10 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                Carrinho carrinho = await _context.Carrinhos
-                    .Include(c => c.Cliente)
-                    .Include(c => c.ItensCarrinho)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                Carrinho carrinho = await _carrinhosService.GetCarrinhoByIdAsync(id);
+                CarrinhoDTO carrinhoDTO = carrinho.ToCarrinho();
 
-                if (carrinho == null)
-                {
-                    return NotFound("Carrinho não encontrado");
-                }
-
-                return Ok(carrinho);
+                return Ok(carrinhoDTO);
             }
             catch (Exception ex)
             {
@@ -44,18 +41,10 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                List<Carrinho> lista = await _context.Carrinhos
-                .Include(c => c.Cliente)
-                .Include(c => c.ItensCarrinho)
-                .ThenInclude(c => c.Produto)
-                .ToListAsync();
+                IEnumerable<Carrinho> carrinho = await _carrinhosService.GetAllCarrinhoAsync();
+                IEnumerable<CarrinhoDTO> carrinhoDTO = carrinho.Select(c => c.ToCarrinho());
 
-                if (lista.Count == 0)
-                {
-                    return NotFound("Nenhum carrinho encontrado.");
-                }
-
-                return Ok(lista);
+                return Ok(carrinhoDTO);
             }
             catch (Exception ex)
             {
@@ -68,23 +57,9 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                if (carrinho == null)
-                {
-                    return BadRequest("O carrinho não pode ser nulo.");
-                }
+                await _carrinhosService.CreateCarrinhoAsync(carrinho);
 
-                // Verificar se o cliente já possui um carrinho
-                Carrinho carrinhoExistente = await _context.Carrinhos.FirstOrDefaultAsync(c => c.ClienteId == carrinho.ClienteId);
-
-                if (carrinhoExistente != null)
-                {
-                    return BadRequest("O cliente já possui um carrinho ativo.");
-                }
-
-                _context.Carrinhos.Add(carrinho);
-                await _context.SaveChangesAsync();
-
-                return Ok(carrinho);
+                return Ok(new { Message = "Carrinho criado com sucesso", Carrinho = carrinho });
             }
             catch (Exception ex)
             {
@@ -97,24 +72,10 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                Carrinho carrinho = await _context.Carrinhos.FindAsync(id);
+                Carrinho carrinho = await _carrinhosService.GetCarrinhoByIdAsync(id);
+                await _carrinhosService.RemoveCarrinho(id);
 
-                if (carrinho == null)
-                {
-                    return NotFound("Carrinho não encontrado");
-                }
-
-                var clienteComCarrinho = await _context.Clientes.FirstOrDefaultAsync(c => c.CarrinhoId == id);
-
-                if (clienteComCarrinho != null)
-                {
-                    clienteComCarrinho.CarrinhoId = null;
-                }
-
-                _context.Carrinhos.Remove(carrinho);
-                await _context.SaveChangesAsync();
-
-                return Ok("Carrinho excluído com sucesso");
+                return Ok(new { Message = "Carrinho excluído com sucesso", Carrinho = carrinho});
             }
             catch (Exception ex)
             {

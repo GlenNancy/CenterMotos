@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CenterMotosApi.DTO;
+using CenterMotosApi.DTO.Builder;
 
 namespace CenterMotosApi.Models
 {
@@ -15,5 +17,16 @@ namespace CenterMotosApi.Models
         public Cliente? Cliente { get; set; }
 
         public ICollection<ItemCarrinho>? ItensCarrinho { get; set; }
+
+        public CarrinhoDTO ToCarrinho()
+        {
+            CarrinhoDTO carrinhoDTO = new CarrinhoDTOBuilder()
+            .WithId(Id)
+            .WithItensCarrinho(ItensCarrinho)
+            .WithNomeCliente(Cliente.Nome)
+            .Build();
+
+            return carrinhoDTO;
+        }
     }
 }

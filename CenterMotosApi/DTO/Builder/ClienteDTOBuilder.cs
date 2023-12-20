@@ -18,12 +18,6 @@ namespace CenterMotosApi.DTO.Builder
             return this;
         }
 
-        public ClienteDTOBuilder WithCarrinhoId(int? carrinhoid)
-        {
-            _clienteDTO.CarrinhoId = carrinhoid;
-            return this;
-        }
-
         public ClienteDTOBuilder WithComentarios(ICollection<Comentario> comentarios)
         {
             _clienteDTO.Comentarios = comentarios;

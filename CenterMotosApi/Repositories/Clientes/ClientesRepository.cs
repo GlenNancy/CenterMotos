@@ -12,7 +12,7 @@ namespace CenterMotosApi.Repositories
         {
             _context = context;
         }
-
+ 
         public async Task<Cliente> GetClienteByIdAsync(int id)
         {
             return await _context.Clientes

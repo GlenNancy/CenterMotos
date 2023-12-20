@@ -5,6 +5,7 @@ using CenterMotosApi.Exceptions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using CenterMotosApi.Data;
 using Microsoft.EntityFrameworkCore;
+using CenterMotosApi.DTO;
 
 namespace CenterMotosApi.Services
 {

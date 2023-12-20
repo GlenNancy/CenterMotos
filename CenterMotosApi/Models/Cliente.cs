@@ -40,7 +40,6 @@ namespace CenterMotosApi.Models
             ClienteDTO clienteDTO = new ClienteDTOBuilder()
             .WithId(Id)
             .WithNomeCliente(Nome)
-            .WithCarrinhoId(CarrinhoId)
             .WithComentarios(Comentarios)
             .Build();
 

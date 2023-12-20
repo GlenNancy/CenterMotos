@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CenterMotosApi.Data;
 using CenterMotosApi.Models;
+using CenterMotosApi.DTO;
+using CenterMotosApi.Services;
 
 namespace CenterMotosApi.Controllers
 {
@@ -10,10 +12,28 @@ namespace CenterMotosApi.Controllers
     public class ItemCarrinhosController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IItemCarrinhosService _itemCarrinhosService;
 
-        public ItemCarrinhosController(DataContext context)
+        public ItemCarrinhosController(DataContext context, IItemCarrinhosService itemCarrinhosService)
         {
             _context = context;
+            _itemCarrinhosService = itemCarrinhosService;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                ItemCarrinho itemCarrinho = await _itemCarrinhosService.GetItemCarrinhoByIdAsync(id);
+                ItemCarrinhoDTO itemCarrinhoDTO = itemCarrinho.ToItemCarrinho();
+
+                return Ok(itemCarrinhoDTO);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Ocorreu um erro: {ex.Message}");
+            }
         }
 
         [HttpGet("GetAll")]
@@ -21,14 +41,10 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                List<ItemCarrinho> lista = await _context.ItemCarrinhos.ToListAsync();
+                IEnumerable<ItemCarrinho> itemCarrinho = await _itemCarrinhosService.GetAllItemCarrinhoAsync();
+                IEnumerable<ItemCarrinhoDTO> itemCarrinhoDTO = itemCarrinho.Select(i => i.ToItemCarrinho());
 
-                if (lista.Count == 0)
-                {
-                    return NotFound("Nenhum Item encontrado.");
-                }
-
-                return Ok(lista);
+                return Ok(itemCarrinhoDTO);
             }
             catch (Exception ex)
             {
@@ -41,27 +57,7 @@ namespace CenterMotosApi.Controllers
         {
             try
             {
-                Produto produto = await _context.Produtos.FindAsync(itemCarrinho.ProdutoId);
-
-                if (itemCarrinho == null)
-                {
-                    return BadRequest("O item não pode ser nulo.");
-                }
-
-                if (itemCarrinho.Quantidade <= 0)
-                {
-                    return BadRequest("Deve ser especificado a Quantidade");
-                }
-
-                if (produto == null)
-                {
-                    return BadRequest("Produto não encontrado");
-                }
-
-                itemCarrinho.PrecoUnitario = produto.Preco;
-
-                await _context.ItemCarrinhos.AddAsync(itemCarrinho);
-                await _context.SaveChangesAsync();
+                await _itemCarrinhosService.CreateItemCarrinhoAsync(itemCarrinho);
 
                 return Ok(new { Message = "Item adicionado com sucesso", ItemCarrinho = itemCarrinho });
             }
@@ -74,17 +70,18 @@ namespace CenterMotosApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            ItemCarrinho itemCarrinho = await _context.ItemCarrinhos.FirstOrDefaultAsync(delete => delete.Id == id);
-
-            if(itemCarrinho == null)
+            try
             {
-                return NotFound("Produto não encontrado");
+                ItemCarrinho itemCarrinho = await _itemCarrinhosService.GetItemCarrinhoByIdAsync(id);
+                await _itemCarrinhosService.RemoveItemCarrinho(id);
+
+                return Ok(new { Message = "Item excluído com sucesso", ItemCarrinho = itemCarrinho });
+
             }
-
-            _context.ItemCarrinhos.Remove(itemCarrinho);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { Message = "Item excluído com sucesso", ItemCarrinho = itemCarrinho });
+            catch (Exception ex)
+            {
+                return BadRequest($"Ocorreu um erro: {ex.Message}");
+            }
         }
     }
 }

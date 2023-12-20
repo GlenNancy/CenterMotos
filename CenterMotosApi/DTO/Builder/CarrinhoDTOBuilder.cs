@@ -24,5 +24,10 @@ namespace CenterMotosApi.DTO.Builder
             return this;
         }
 
+         public CarrinhoDTO Build()
+        {
+            return _carrinhoDTO;
+        }
+
     }
 }
