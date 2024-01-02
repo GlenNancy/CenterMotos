@@ -28,6 +28,8 @@ builder.Services.AddScoped<ICarrinhosRepository, CarrinhosRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IItemCarrinhosService, ItemCarrinhosService>();
 builder.Services.AddScoped<IItemCarrinhosRepository, ItemCarrinhosRepository>();
+builder.Services.AddScoped<IProdutosService, ProdutosService>();
+builder.Services.AddScoped<IProdutosRepository, ProdutosRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
