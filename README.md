@@ -1,1 +1,2 @@
-
+## Center Motos
+<p> O projeto Center Motos foi concebido como uma iniciativa voltada para uma empresa de mecânica, com o propósito de expandir sua presença para o ambiente online. Desenvolvido com o intuito de explorar e aprimorar meus conhecimentos em APIs, a implementação foi realizada utilizando as tecnologias <strong>C# .NET e SQL</strong> para a criação da API, enquanto o Insomnia foi empregado para a execução de testes. </p>
