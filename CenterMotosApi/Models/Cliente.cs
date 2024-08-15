@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CenterMotosApi.Models
 {
     [Table("Cliente")]
-    public class Cliente
+    public class Cliente 
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

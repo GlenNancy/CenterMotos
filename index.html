@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de Imagem</title>
+</head>
+<body>
+
+    <h2>Envio de Imagem</h2>
+
+    <form action="/Produtos/RegistrarProduto" method="post" enctype="multipart/form-data" id="formProduto">
+        <label for="nome">Nome do Produto:</label>
+        <input type="text" id="nome" name="Nome" required maxlength="40">
+
+        <br>
+
+        <label for="descricao">Descrição do Produto:</label>
+        <textarea id="descricao" name="Descricao" required maxlength="255"></textarea>
+
+        <br>
+
+        <label for="preco">Preço do Produto:</label>
+        <input type="number" id="preco" name="Preco" required min="0" step="0.01">
+
+        <br>
+
+        <label for="imagem">Imagem do Produto:</label>
+        <input type="file" id="imagem" name="ImagemUpload" accept="image/*" onchange="exibirImagem(this)">
+
+        <br>
+
+        <!-- Adicionando a tag img para exibir a imagem -->
+        <img id="imagemPreview" src="#" alt="Imagem do Produto" style="max-width: 300px; max-height: 300px; display: none;">
+
+        <br>
+
+        <button type="submit">Registrar Produto</button>
+    </form>
+
+    <script>
+        function exibirImagem(input) {
+            const imagemPreview = document.getElementById('imagemPreview');
+
+            if (input.files && input.files[0]) {
+                const leitor = new FileReader();
+
+                leitor.onload = function (e) {
+                    imagemPreview.src = e.target.result;
+                    imagemPreview.style.display = 'block';
+                };
+
+                leitor.readAsDataURL(input.files[0]);
+            } else {
+                imagemPreview.src = '#';
+                imagemPreview.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>

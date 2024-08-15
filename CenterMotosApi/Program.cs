@@ -9,11 +9,13 @@ using Microsoft.EntityFrameworkCore.Design;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurando a conexão com o banco de dados
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoLocal"));
 });
 
+// Configuração para uploads grandes
 builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 100_000_000; // Limite de tamanho de 100 MB para uploads
@@ -21,6 +23,18 @@ builder.Services.Configure<FormOptions>(options =>
 
 builder.Services.AddMvc();
 
+// Configuração de CORS para permitir qualquer origem, método e cabeçalho
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost3000", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") //permite só no meu front nessa porta
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// Registrando os serviços e repositórios no container de injeção de dependência
 builder.Services.AddScoped<IClientesService, ClientesService>();
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<ICarrinhoService, CarrinhoService>();
@@ -44,6 +58,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Aplicando a política de CORS que permite todas as origens, métodos e cabeçalhos
+app.UseCors("AllowLocalhost3000");
+
 app.UseAuthorization();
 app.MapControllers();
 

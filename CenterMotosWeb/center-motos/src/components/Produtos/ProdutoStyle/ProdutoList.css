@@ -1,0 +1,57 @@
+.produto-list-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .produto-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .produto-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .produto-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .produto-id,
+  .produto-nome,
+  .produto-descricao,
+  .produto-preco {
+    margin: 0;
+  }
+  
+  .produto-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .produto-edit-button,
+  .produto-delete-button {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .produto-edit-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .produto-delete-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
